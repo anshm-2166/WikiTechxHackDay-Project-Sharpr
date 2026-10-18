@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import threading
 import time
+from pathlib import Path
 from dataclasses import dataclass, asdict
 from typing import Callable, Optional
 
@@ -11,7 +12,7 @@ import numpy as np
 from PIL import Image, ImageOps
 
 from . import engine, guards
-from .settings import Settings
+from .settings import Settings, missing_models_message
 
 EXTS = (".png", ".jpg", ".jpeg", ".webp", ".bmp")
 
@@ -101,6 +102,16 @@ def _grain(img: np.ndarray, amount: int) -> np.ndarray:
     return out
 
 
+def resolve_models_dir(settings: Settings, model: str, scale: int):
+    """Folder that contains the files for this model, or raise engine.ModelsMissing (friendly message)."""
+    paths = settings.search_paths()
+    param, binf = engine.model_files(Path("."), model, scale)
+    for p in paths:
+        if (p / param.name).exists() and (p / binf.name).exists():
+            return p
+    raise engine.ModelsMissing(missing_models_message(paths, param.stem))
+
+
 def process(
     path,
     opts: Options,
@@ -144,7 +155,7 @@ def process(
     rgb = cv2.cvtColor(src, cv2.COLOR_BGR2RGB)
     out_rgb, info = engine.upscale_rgb(
         rgb, used.model, used.scale,
-        models_dir=settings.models_dir,
+        models_dir=resolve_models_dir(settings, used.model, used.scale),
         engine=settings["engine"],
         allow_fallback=bool(settings["cpu_fallback"]),
         threads=int(settings["threads"]),

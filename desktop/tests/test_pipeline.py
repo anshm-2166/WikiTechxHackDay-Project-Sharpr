@@ -146,11 +146,52 @@ def test_no_em_dash_or_mojibake():
         assert "â€" not in text and "Ã" not in text, f"mojibake in {f}"
 
 
+def test_model_discovery_order():
+    import os
+    from sharpr import settings as st
+    root, exe = Path("/r"), Path("/x/bin")
+    got = st.model_search_paths("/o", env="/e", root=root, exe_dir=exe)
+    assert got == [Path("/o"), Path("/e"), root / "models", root.parent / "app/src/main/assets/models",
+                   exe / "models", exe.parent / "app/src/main/assets/models"], got
+    assert st.model_search_paths("", env="", root=root, exe_dir=None)[0] == root / "models"
+    # package-relative, independent of the working directory
+    here = os.getcwd()
+    try:
+        os.chdir(tempfile.gettempdir())
+        paths = st.model_search_paths("", env="")
+        assert paths[0] == st.project_root() / "models" and paths[0].is_absolute()
+        assert (st.project_root().parent / "app/src/main/assets/models") in paths
+    finally:
+        os.chdir(here)
+    with tempfile.TemporaryDirectory() as a, tempfile.TemporaryDirectory() as b:
+        (Path(b) / "realesrgan-x4plus.param").write_text("x")
+        assert st.find_models_dir(paths=[Path(a), Path(b)]) == Path(b)     # first dir that has models
+        assert st.find_models_dir(paths=[Path(a)]) == Path(a)
+
+
+def test_missing_models_message():
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        src = td / "in.png"
+        make_image(src)
+        s = Settings(td / "s.json")
+        s.values.update(engine="cpu")
+        s.search_paths = lambda: [td / "nowhere"]
+        try:
+            pipeline.process(src, pipeline.Options("fast", 2), s)
+        except engine.ModelsMissing as e:
+            msg = str(e)
+            assert "nowhere" in msg and "Folders searched" in msg and "How to fix" in msg
+            assert "realesr-animevideov3-x2" in msg and "SHARPR_MODELS" in msg
+        else:
+            raise AssertionError("expected ModelsMissing")
+
+
 def test_gpu_probe():
     print("vulkan gpus:", engine.gpu_count())
 
 
 if __name__ == "__main__":
     test_analysis_and_guard_logic(); test_scale_plan(); test_pipeline_does_not_block_resolution_but_blocks_tiny()
-    test_cancel(); test_pipeline_fast_cpu(); test_cap_falls_to_1x(); test_no_em_dash_or_mojibake(); test_gpu_probe()
+    test_cancel(); test_pipeline_fast_cpu(); test_cap_falls_to_1x(); test_no_em_dash_or_mojibake(); test_model_discovery_order(); test_missing_models_message(); test_gpu_probe()
     print("ALL OK")

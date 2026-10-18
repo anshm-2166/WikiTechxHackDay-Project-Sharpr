@@ -109,7 +109,7 @@ def check_input(width: int, height: int, max_side: int = 2048, strict: bool = Fa
     crisp = detail is not None and detail >= CRISP_FROM
     if high and crisp:
         msg = (f"At {width} x {height} ({width * height / 1e6:.1f} MP) this image is detailed enough already. "
-               "upscaling it would burn time and memory for little gain.")
+               "Upscaling it would burn time and memory for little gain.")
         if strict:
             msg += " Strict guard is on in Settings, so it cannot be overridden."
         return GuardResult(False, not strict, msg, "Already high resolution and sharp")

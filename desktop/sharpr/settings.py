@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 import threading
 from pathlib import Path
 
@@ -50,24 +51,50 @@ def project_root() -> Path:
     return Path(__file__).resolve().parent.parent
 
 
-def find_models_dir(override: str = "") -> Path:
-    """Resolve the folder holding the ncnn .param/.bin files.
+def model_search_paths(override: str = "", env: str | None = None, root: Path | None = None,
+                       exe_dir: Path | None = None) -> list[Path]:
+    """Folders searched for the ncnn model files, in priority order.
 
-    Order: explicit setting, SHARPR_MODELS env, desktop/models, then the
-    shared Android assets folder (../app/src/main/assets/models).
+    1. `models_dir` setting, 2. SHARPR_MODELS env var, 3. desktop/models, 4. the shared Android assets
+    (../app/src/main/assets/models) relative to the package (never the working directory), 5. the same two
+    folders next to the executable when frozen.
     """
-    candidates = []
+    root = root or project_root()
+    env = os.environ.get("SHARPR_MODELS", "") if env is None else env
+    out: list[Path] = []
     if override:
-        candidates.append(Path(override))
-    if os.environ.get("SHARPR_MODELS"):
-        candidates.append(Path(os.environ["SHARPR_MODELS"]))
-    root = project_root()
-    candidates.append(root / "models")
-    candidates.append(root.parent / "app" / "src" / "main" / "assets" / "models")
-    for c in candidates:
-        if (c / "realesrgan-x4plus.param").exists() or (c / "realesr-animevideov3-x2.param").exists():
+        out.append(Path(override))
+    if env:
+        out.append(Path(env))
+    out += [root / "models", root.parent / "app" / "src" / "main" / "assets" / "models"]
+    if exe_dir is None and getattr(sys, "frozen", False):
+        exe_dir = Path(sys.executable).resolve().parent
+    if exe_dir is not None:
+        out += [exe_dir / "models", exe_dir.parent / "app" / "src" / "main" / "assets" / "models"]
+    seen, unique = set(), []
+    for p in out:
+        if str(p) not in seen:
+            seen.add(str(p))
+            unique.append(p)
+    return unique
+
+
+def find_models_dir(override: str = "", paths: list[Path] | None = None) -> Path:
+    """First search path that contains any model file (else the first path)."""
+    paths = paths if paths is not None else model_search_paths(override)
+    for c in paths:
+        if (c / "realesrgan-x4plus.param").exists() or (c / "realesr-animevideov3-x4.param").exists():
             return c
-    return candidates[0]
+    return paths[0]
+
+
+def missing_models_message(paths: list[Path], needed: str) -> str:
+    listing = "\n".join(f"  {p}" for p in paths)
+    return (f"Sharpr could not find its AI model files ({needed}.param and {needed}.bin).\n\n"
+            f"Folders searched:\n{listing}\n\n"
+            "How to fix: copy the models folder (the .param and .bin files from app/src/main/assets/models) "
+            "into desktop/models, or set the SHARPR_MODELS environment variable, or set \"models_dir\" in "
+            "settings.json to the folder that contains them.")
 
 
 class Settings:
@@ -106,6 +133,9 @@ class Settings:
             self.values[key] = value
             self.save()
 
+    def search_paths(self) -> list[Path]:
+        return model_search_paths(self.values.get("models_dir", ""))
+
     @property
     def models_dir(self) -> Path:
-        return find_models_dir(self.values.get("models_dir", ""))
+        return find_models_dir(paths=self.search_paths())

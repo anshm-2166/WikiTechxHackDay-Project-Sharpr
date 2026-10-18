@@ -30,16 +30,21 @@ class SettingsScreen(BaseScreen):
         super().__init__(**kw)
         self.root_box = BoxLayout(orientation="vertical", padding=[dp(24), dp(16), dp(24), 0], spacing=dp(8))
         self.root_box.add_widget(Header("Settings", "Everything is stored locally"))
-        self.scroll = Scroll(pad=(0, 8, 0, 120))
+        self.scroll = Scroll(pad=(0, 8, 0, 8))
         self.root_box.add_widget(self.scroll)
         self.add_widget(self.root_box)
-        self.setup_responsive(self.root_box, top=16, wide_max=760)
+        self.setup_responsive(self.root_box, top=16, bottom=96, wide_max=760)
         self._built = False
+        self._controls = []
 
     def on_show(self, **kw):
         if not self._built:
             self._build()
             self._built = True
+        for widget, key, prop in self._controls:   # keep controls in step with the stored values
+            value = self.app.settings[key]
+            if getattr(widget, prop) != value:
+                setattr(widget, prop, value)
 
     def _card(self, title):
         c = Card(auto_height=True, padding=dp(18), spacing=dp(16))
@@ -53,6 +58,7 @@ class SettingsScreen(BaseScreen):
             if after:
                 after()
         widget.bind(**{prop: cb})
+        self._controls.append((widget, key, prop))
 
     def _build(self):
         s = self.app.settings

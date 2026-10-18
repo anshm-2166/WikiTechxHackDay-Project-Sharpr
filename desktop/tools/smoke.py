@@ -84,7 +84,7 @@ def slow():
 step(slow, 2.5)
 step(lambda: None, 1.0)
 step(lambda: app.root.export_to_png(str(out / "15_progress.png")), 1.0)
-step(lambda: app.screens and app._cancel.set(), 2.0)
+step(lambda: app.screens and app._cancel_job(), 2.0)
 step(lambda: shot("16_after_cancel"))
 Clock.schedule_once(run_next, 3.0)
 app.run()

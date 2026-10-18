@@ -1,8 +1,8 @@
 """Application shell: window, theme wiring, navigation, background job runner."""
 from __future__ import annotations
 
+import os
 import threading
-import traceback
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -12,7 +12,7 @@ from kivy.properties import StringProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import FadeTransition, ScreenManager
 
-from . import engine, pipeline
+from . import pipeline
 from .library import Library
 from .settings import Settings
 from .theme import register_fonts, theme
@@ -172,42 +172,81 @@ class SharprApp(App):
         return Dialog(title, message, buttons).show(self.overlay)
 
     # background jobs -------------------------------------------------------
-    def run_job(self, work, on_success, title="Upscaling"):
-        """Run work(progress, cancel) in a worker thread with a progress overlay.
+    def run_job(self, job, on_success, title="Upscaling"):
+        """Run `job` in a separate worker process (ncnn holds the GIL, which would freeze the UI in a
+        thread) and show a progress overlay. on_success(item, summary) runs on the UI thread."""
+        import json
+        import queue
+        import subprocess
+        import sys
 
-        progress(frac, tile, tiles, engine_label, stage) may be called from the worker.
-        """
-        self._cancel = threading.Event()
-        ui = ProgressOverlay(on_cancel=self._cancel.set)
+        from .settings import project_root
+
+        ui = ProgressOverlay(on_cancel=lambda: self._cancel_job())
         ui.title.text = title
         ui.show(self.overlay)
         self._progress_ui = ui
+        env = dict(os.environ, PYTHONPATH=str(project_root()), PYTHONIOENCODING="utf-8")
+        flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+        self._proc = subprocess.Popen(
+            [sys.executable, "-m", "sharpr.worker", json.dumps(job)], cwd=str(project_root()), env=env,
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
+            encoding="utf-8", creationflags=flags)
+        events: "queue.Queue[dict]" = queue.Queue()
+        proc = self._proc
 
-        def progress(frac, tile, tiles, label, stage):
-            Clock.schedule_once(lambda dt: ui.update(frac, tile, tiles, label, stage), 0)
+        def reader():
+            for line in proc.stdout:
+                if line.startswith("@@"):
+                    try:
+                        events.put(json.loads(line[2:]))
+                    except ValueError:
+                        pass
+            events.put({"k": "eof"})
 
-        def runner():
-            try:
-                result = work(progress, self._cancel)
-            except engine.Cancelled:
-                Clock.schedule_once(lambda dt: self._job_finished(ui, "cancel"), 0)
-            except pipeline.GuardError as e:
-                Clock.schedule_once(lambda dt, e=e: self._job_finished(ui, "guard", e), 0)
-            except Exception as e:  # noqa: BLE001
-                traceback.print_exc()
-                Clock.schedule_once(lambda dt, e=e: self._job_finished(ui, "error", e), 0)
-            else:
-                Clock.schedule_once(lambda dt: self._job_finished(ui, "ok", result, on_success), 0)
+        threading.Thread(target=reader, daemon=True, name="sharpr-job-reader").start()
+        finished = {"done": False}
 
-        threading.Thread(target=runner, daemon=True, name="sharpr-job").start()
+        def poll(dt):
+            while not events.empty():
+                ev = events.get()
+                k = ev["k"]
+                if k == "progress":
+                    ui.update(ev["frac"], ev["tile"], ev["tiles"], ev["label"], ev["stage"])
+                    continue
+                finished["done"] = True
+                self._job_finished(ui, k, ev, on_success)
+                return False
+            return True
 
-    def _job_finished(self, ui, status, payload=None, on_success=None):
+        Clock.schedule_interval(poll, 0.05)
+
+    def _cancel_job(self):
+        try:
+            self._proc.stdin.write("cancel\n")
+            self._proc.stdin.flush()
+        except Exception:  # noqa: BLE001
+            pass
+
+    def _job_finished(self, ui, kind, ev, on_success):
         ui.dismiss()
-        if status == "ok":
-            on_success(payload)
-        elif status == "cancel":
+        try:
+            self._proc.wait(timeout=5)
+        except Exception:  # noqa: BLE001
+            self._proc.kill()
+        if kind == "done":
+            self.library.reload()
+            on_success(ev["item"], ev)
+        elif kind == "cancel":
             self.toast("Upscale cancelled")
-        elif status == "guard":
-            self.dialog(payload.title, payload.message)
+        elif kind == "guard":
+            self.dialog(ev["title"], ev["message"])
+        elif kind == "error":
+            self.dialog(ev.get("title", "Something went wrong"), ev.get("message", "Unknown error"))
         else:
-            self.dialog("Something went wrong", f"{payload}")
+            self.dialog("Something went wrong", "The upscale process ended unexpectedly.")
+
+    def on_stop(self):
+        proc = getattr(self, "_proc", None)
+        if proc is not None and proc.poll() is None:
+            proc.kill()

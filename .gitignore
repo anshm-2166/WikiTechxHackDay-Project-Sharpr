@@ -22,3 +22,5 @@ desktop/.venv/
 __pycache__/
 *.pyc
 website/assets/samples/mk.py
+
+.idea/

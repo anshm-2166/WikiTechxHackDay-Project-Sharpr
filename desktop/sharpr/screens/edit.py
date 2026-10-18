@@ -56,21 +56,12 @@ class EditScreen(BaseScreen):
 
     def start(self):
         item = self.item
-        lib, s = self.app.library, self.app.settings
-        opts = self.options.get_options()
-        keep = self.keep.active
-        original = lib.path(item, "original")
+        original = self.app.library.path(item, "original")
+        job = {"path": str(original), "options": self.options.get_options().to_dict(), "override": True,
+               "name": item.get("name", ""), "replace_id": None if self.keep.active else item["id"]}
 
-        def work(progress, cancel):
-            res = pipeline.process(original, opts, s, override=True, progress=progress, cancel=cancel)
-            progress(1.0, res.info.tiles, res.info.tiles, res.info.backend_label, "Saving")
-            saved = lib.save_result(original, res, s["out_format"], int(s["out_quality"]), name=item.get("name", ""),
-                                    replace_id=None if keep else item["id"])
-            return saved, res
-
-        def done(payload):
-            saved, res = payload
-            self.app.toast(res.note or f"Done in {res.seconds:.1f}s on {res.info.backend_label}")
+        def done(saved, ev):
+            self.app.toast(ev.get("note") or f"Done in {ev['seconds']:.1f}s on {ev['backend']}")
             self.app.pop_to_detail(saved["id"])
 
-        self.app.run_job(work, done, title="Regenerating")
+        self.app.run_job(job, done, title="Regenerating")

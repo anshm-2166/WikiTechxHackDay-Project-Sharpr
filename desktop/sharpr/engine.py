@@ -25,6 +25,10 @@ class EngineError(RuntimeError):
     pass
 
 
+class ModelsMissing(EngineError):
+    """Model files could not be found; the message lists searched folders and how to fix it."""
+
+
 class Cancelled(Exception):
     pass
 

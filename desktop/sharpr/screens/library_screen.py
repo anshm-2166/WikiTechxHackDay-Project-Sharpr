@@ -9,6 +9,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 
+from ..engine import MODEL_LABELS
 from ..widgets import (Btn, Card, Chip, Header, IconBtn, RoundedImage, Scroll, Skin, T,
                        texture_from_bgr)
 from .base import BaseScreen
@@ -26,11 +27,11 @@ class Tile(Skin, ButtonBehavior, FloatLayout):
             pass
         self.img = RoundedImage(texture=tex, mode="cover", radius=18, pos_hint={"x": 0, "y": 0}, size_hint=(1, 1))
         self.add_widget(self.img)
-        self.badge = Chip(f"{item.get('scale', '?')}x", tone="primary")
+        self.badge = Chip(f"{MODEL_LABELS.get(item.get('model'), '')} {item.get('scale', '?')}x".strip(), tone="primary")
         self.badge.label.tone = "on_primary"
         self.badge.pos = (self.x + dp(12), (self.y + self.height) - dp(44))
         self.add_widget(self.badge)
-        self.delete = IconBtn("trash", "danger", size=34)
+        self.delete = IconBtn("trash", "danger", size=32)
         self.add_widget(self.delete)
         self.caption = Chip(f"{item.get('new_w')} x {item.get('new_h')}",
                             tone="surface")
@@ -43,7 +44,7 @@ class Tile(Skin, ButtonBehavior, FloatLayout):
 
     def _lay(self, *_):
         self.badge.pos = (self.x + dp(12), (self.y + self.height) - dp(44))
-        self.delete.pos = ((self.x + self.width) - dp(46), (self.y + self.height) - dp(46))
+        self.delete.pos = ((self.x + self.width) - dp(42), (self.y + self.height) - dp(42))
         self.caption.pos = (self.x + dp(12), self.y + dp(12))
 
     def paint(self):
@@ -61,10 +62,10 @@ class LibraryScreen(BaseScreen):
         root = BoxLayout(orientation="vertical", spacing=dp(8))
         self.header = Header("Library", "")
         root.add_widget(self.header)
-        self.scroll = Scroll(pad=(0, 8, 0, 120))
+        self.scroll = Scroll(pad=(0, 8, 0, 8))
         root.add_widget(self.scroll)
         self.add_widget(root)
-        self.setup_responsive(root, top=16)
+        self.setup_responsive(root, top=16, bottom=96)
         self.scroll.bind(width=lambda *_: self._relayout())
         self._items = []
 
@@ -75,7 +76,9 @@ class LibraryScreen(BaseScreen):
         self._build()
 
     def _cols(self):
-        return max(1, int((self.scroll.width + dp(16)) // dp(186)))
+        if self.app.mode == "phone":
+            return 2
+        return max(1, int((self.scroll.width + dp(16)) // dp(356)))
 
     def _relayout(self):
         if not hasattr(self, "grid") or self.grid.parent is None:

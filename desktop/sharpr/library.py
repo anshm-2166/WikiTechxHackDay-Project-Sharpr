@@ -36,6 +36,10 @@ class Library:
         except (OSError, ValueError):
             self.items = []
 
+    def reload(self):
+        with self._lock:
+            self._load()
+
     def _save(self):
         tmp = self.index_path.with_suffix(".tmp")
         tmp.write_text(json.dumps({"version": 1, "items": self.items}, indent=1), encoding="utf-8")

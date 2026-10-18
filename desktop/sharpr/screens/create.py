@@ -33,10 +33,10 @@ class CreateScreen(BaseScreen):
         self.options = OptionsPanel()
         self.go_btn = Btn("Upscale", icon="create", height=dp(54))
         self.go_btn.bind(on_release=lambda *_: self.start())
-        self.pane = TwoPane([self.hero, self.stage], [self.options, self.go_btn], side_w=390, bottom=110)
+        self.pane = TwoPane([self.hero, self.stage], [self.options, self.go_btn], side_w=390, bottom=16)
         root.add_widget(self.pane)
         self.add_widget(root)
-        self.setup_responsive(root, top=12)
+        self.setup_responsive(root, top=12, bottom=96)
         self.options.bind_change(self._refresh_state)
         self.on_mode(self.app.mode)
         self._render()
@@ -140,23 +140,16 @@ class CreateScreen(BaseScreen):
     def start(self):
         if not self.path or self.go_btn.disabled:
             return
-        opts = self.options.get_options()
-        path, loaded, override = self.path, self.loaded, self.override
-        s, lib = self.app.settings, self.app.library
+        job = {"path": str(self.path), "options": self.options.get_options().to_dict(),
+               "override": self.override, "name": ""}
 
-        def work(progress, cancel):
-            res = pipeline.process(path, opts, s, override=override, progress=progress, cancel=cancel, loaded=loaded)
-            progress(1.0, res.info.tiles, res.info.tiles, res.info.backend_label, "Saving")
-            return lib.save_result(path, res, s["out_format"], int(s["out_quality"])), res
-
-        def done(payload):
-            item, res = payload
+        def done(item, ev):
             notes = []
-            if res.note:
-                notes.append(res.note)
-            if res.info.fell_back:
+            if ev.get("note"):
+                notes.append(ev["note"])
+            if ev.get("fell_back"):
                 notes.append("GPU failed, used CPU instead.")
-            self.app.toast(" ".join(notes) or f"Done in {res.seconds:.1f}s on {res.info.backend_label}")
+            self.app.toast(" ".join(notes) or f"Done in {ev['seconds']:.1f}s on {ev['backend']}")
             self.app.push("detail", item_id=item["id"])
 
-        self.app.run_job(work, done)
+        self.app.run_job(job, done)
