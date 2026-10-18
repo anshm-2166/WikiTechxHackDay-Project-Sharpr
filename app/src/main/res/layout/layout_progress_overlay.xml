@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/overlay_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/sScrim"
+    android:clickable="true"
+    android:focusable="true"
+    android:visibility="gone">
+
+    <LinearLayout
+        style="@style/Sharpr.Card"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="12dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="26dp">
+
+        <FrameLayout
+            android:layout_width="168dp"
+            android:layout_height="168dp">
+
+            <com.vytros.projects.sharpr.ui.widgets.RingProgressView
+                android:id="@+id/ring"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="0%"
+                android:textAppearance="@style/TextAppearance.S.Display" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/stage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Preparing"
+            android:textAppearance="@style/TextAppearance.S.Heading" />
+
+        <TextView
+            android:id="@+id/tiles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textAppearance="@style/TextAppearance.S.Caption" />
+
+        <TextView
+            android:id="@+id/backend"
+            style="@style/Sharpr.Chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/fallback_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="GPU couldn't run this, so Sharpr switched to CPU."
+            android:textAppearance="@style/TextAppearance.S.Caption"
+            android:textColor="?attr/sWarn"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/cancel"
+            style="@style/Sharpr.Button.Soft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Cancel" />
+    </LinearLayout>
+</FrameLayout>

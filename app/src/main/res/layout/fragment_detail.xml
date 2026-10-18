@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/sBg"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/back"
+            style="@style/Sharpr.IconButton"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_back" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.S.Heading" />
+
+            <TextView
+                android:id="@+id/subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.S.Caption" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/info_btn"
+            style="@style/Sharpr.IconButton"
+            android:contentDescription="Details"
+            android:src="@drawable/ic_info" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_card_alt"
+        android:clipToOutline="true">
+
+        <com.vytros.projects.sharpr.ui.widgets.CompareView
+            android:id="@+id/compare"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/zoom_chip"
+            style="@style/Sharpr.Chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="12dp"
+            android:background="@drawable/bg_label_dark"
+            android:textColor="#FFFFFFFF"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Loading…"
+            android:textAppearance="@style/TextAppearance.S.Muted" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/info_card"
+        style="@style/Sharpr.Card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="12dp"
+        android:orientation="vertical"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Drag the handle · pinch to zoom · double-tap to magnify"
+        android:textAppearance="@style/TextAppearance.S.Caption" />
+
+    <LinearLayout
+        android:id="@+id/actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:background="@drawable/bg_nav_pill"
+        android:orientation="horizontal"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp">
+
+        <TextView
+            android:id="@+id/act_share"
+            style="@style/Sharpr.Action"
+            android:drawableTop="@drawable/ic_share"
+            android:text="Share" />
+
+        <TextView
+            android:id="@+id/act_edit"
+            style="@style/Sharpr.Action"
+            android:drawableTop="@drawable/ic_edit"
+            android:text="Edit" />
+
+        <TextView
+            android:id="@+id/act_save"
+            style="@style/Sharpr.Action"
+            android:drawableTop="@drawable/ic_download"
+            android:text="Save" />
+
+        <TextView
+            android:id="@+id/act_delete"
+            style="@style/Sharpr.Action"
+            android:drawableTop="@drawable/ic_trash"
+            android:text="Delete" />
+    </LinearLayout>
+</LinearLayout>

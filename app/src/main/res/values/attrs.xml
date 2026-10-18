@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Sharpr's own palette; deliberately not Material's colour roles. -->
+    <attr name="sBg" format="color" />
+    <attr name="sSurface" format="color" />
+    <attr name="sSurfaceAlt" format="color" />
+    <attr name="sPrimary" format="color" />
+    <attr name="sPrimaryDeep" format="color" />
+    <attr name="sOnPrimary" format="color" />
+    <attr name="sText" format="color" />
+    <attr name="sMuted" format="color" />
+    <attr name="sOutline" format="color" />
+    <attr name="sGradEnd" format="color" />
+    <attr name="sDanger" format="color" />
+    <attr name="sWarn" format="color" />
+    <attr name="sSuccess" format="color" />
+    <attr name="sScrim" format="color" />
+
+    <declare-styleable name="SegmentedControl">
+        <attr name="entries" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="LabeledSlider">
+        <attr name="label" format="string" />
+        <attr name="max" format="integer" />
+        <attr name="suffix" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="SwitchRow">
+        <attr name="title" format="string" />
+        <attr name="subtitle" format="string" />
+    </declare-styleable>
+</resources>

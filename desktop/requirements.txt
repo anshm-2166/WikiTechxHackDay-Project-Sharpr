@@ -1,0 +1,5 @@
+kivy>=2.3.0
+ncnn>=1.0.20240101
+opencv-python>=4.8
+numpy>=1.26
+pillow>=10.0

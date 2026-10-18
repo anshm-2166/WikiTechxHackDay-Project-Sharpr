@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.Sharpr" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="sBg">#FF0E0A1A</item>
+        <item name="sSurface">#FF171127</item>
+        <item name="sSurfaceAlt">#FF211936</item>
+        <item name="sPrimary">#FFA78BFA</item>
+        <item name="sPrimaryDeep">#FF7C3AED</item>
+        <item name="sOnPrimary">#FF14082B</item>
+        <item name="sText">#FFF3EEFF</item>
+        <item name="sMuted">#FFA59CC4</item>
+        <item name="sOutline">#FF2E2548</item>
+        <item name="sGradEnd">#FFC026D3</item>
+        <item name="sDanger">#FFFF6B8B</item>
+        <item name="sWarn">#FFF5B94B</item>
+        <item name="sSuccess">#FF4ADE80</item>
+        <item name="sScrim">#B3000000</item>
+
+        <item name="colorPrimary">?attr/sPrimary</item>
+        <item name="colorAccent">?attr/sPrimary</item>
+        <item name="colorControlActivated">?attr/sPrimary</item>
+        <item name="android:colorBackground">?attr/sBg</item>
+        <item name="android:windowBackground">?attr/sBg</item>
+        <item name="android:textColorPrimary">?attr/sText</item>
+        <item name="android:textColorSecondary">?attr/sMuted</item>
+        <item name="android:textColorHint">?attr/sMuted</item>
+        <item name="android:textColor">?attr/sText</item>
+        <item name="android:fontFamily">@font/outfit_family</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="29">false</item>
+        <item name="android:enforceStatusBarContrast" tools:targetApi="29">false</item>
+        <item name="android:windowAnimationStyle">@style/Sharpr.WindowAnim</item>
+        <item name="android:textViewStyle">@style/Sharpr.TextView</item>
+    </style>
+
+    <style name="Sharpr.WindowAnim" parent="@android:style/Animation.Activity" />
+
+    <style name="ThemeOverlay.Sharpr.Accent.Violet" parent="">
+        <item name="sPrimary">#FFA78BFA</item>
+        <item name="sPrimaryDeep">#FF7C3AED</item>
+        <item name="sGradEnd">#FFC026D3</item>
+    </style>
+    <style name="ThemeOverlay.Sharpr.Accent.Orchid" parent="">
+        <item name="sPrimary">#FFE879F9</item>
+        <item name="sPrimaryDeep">#FFC026D3</item>
+        <item name="sGradEnd">#FF7C3AED</item>
+    </style>
+    <style name="ThemeOverlay.Sharpr.Accent.Indigo" parent="">
+        <item name="sPrimary">#FF8B93FF</item>
+        <item name="sPrimaryDeep">#FF5B4BEA</item>
+        <item name="sGradEnd">#FF9333EA</item>
+    </style>
+    <style name="ThemeOverlay.Sharpr.Accent.Lilac" parent="">
+        <item name="sPrimary">#FFC4B5FD</item>
+        <item name="sPrimaryDeep">#FF9D7BEA</item>
+        <item name="sGradEnd">#FFEC4899</item>
+    </style>
+
+    <style name="ThemeOverlay.Sharpr.Font.Outfit" parent="">
+        <item name="android:fontFamily">@font/outfit_family</item>
+    </style>
+    <style name="ThemeOverlay.Sharpr.Font.Jakarta" parent="">
+        <item name="android:fontFamily">@font/jakarta_family</item>
+    </style>
+    <style name="ThemeOverlay.Sharpr.Font.Grotesk" parent="">
+        <item name="android:fontFamily">@font/grotesk_family</item>
+    </style>
+
+    <style name="ThemeOverlay.Sharpr.Amoled" parent="">
+        <item name="sBg">#FF000000</item>
+        <item name="sSurface">#FF0D0A16</item>
+        <item name="sSurfaceAlt">#FF181226</item>
+    </style>
+</resources>
+

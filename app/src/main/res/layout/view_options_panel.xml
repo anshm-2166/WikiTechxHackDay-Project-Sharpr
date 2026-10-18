@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Sharpr.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Model"
+        android:textAppearance="@style/TextAppearance.S.Section" />
+
+    <com.vytros.projects.sharpr.ui.widgets.SegmentedControl
+        android:id="@+id/model_seg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/model_blurb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.S.Caption" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Scale"
+        android:textAppearance="@style/TextAppearance.S.Section" />
+
+    <com.vytros.projects.sharpr.ui.widgets.SegmentedControl
+        android:id="@+id/scale_seg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Enhance"
+            android:textAppearance="@style/TextAppearance.S.Section" />
+
+        <TextView
+            android:id="@+id/auto_btn"
+            style="@style/Sharpr.Chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_wand"
+            android:drawablePadding="6dp"
+            android:drawableTint="?attr/sPrimary"
+            android:text="Auto-tune"
+            android:textColor="?attr/sPrimary" />
+    </LinearLayout>
+
+    <com.vytros.projects.sharpr.ui.widgets.LabeledSlider
+        android:id="@+id/denoise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:label="Denoise" />
+
+    <com.vytros.projects.sharpr.ui.widgets.LabeledSlider
+        android:id="@+id/natural"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:label="Natural blend" />
+
+    <com.vytros.projects.sharpr.ui.widgets.LabeledSlider
+        android:id="@+id/sharpen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:label="Sharpen" />
+
+    <com.vytros.projects.sharpr.ui.widgets.LabeledSlider
+        android:id="@+id/grain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:label="Film grain" />
+</LinearLayout>

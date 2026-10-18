@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:overScrollMode="never"
+    android:paddingBottom="140dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="20dp">
+
+        <com.vytros.projects.sharpr.ui.widgets.GradientTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sharpr"
+            android:textAppearance="@style/TextAppearance.S.Display" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Make small pictures big. Entirely on your device."
+            android:textAppearance="@style/TextAppearance.S.Muted" />
+
+        <!-- Empty state: pick an image -->
+        <FrameLayout
+            android:id="@+id/pick_card"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_dropzone"
+            android:foreground="@drawable/bg_ripple_plain">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <ImageView
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+                    android:background="@drawable/bg_gradient_hero"
+                    android:contentDescription="@null"
+                    android:padding="24dp"
+                    android:src="@drawable/ic_sparkle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Pick an image"
+                    android:textAppearance="@style/TextAppearance.S.Title" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="Choose a photo from your gallery.\nUp to 4× larger, nothing leaves your phone."
+                    android:textAppearance="@style/TextAppearance.S.Muted" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- A picked image -->
+        <LinearLayout
+            android:id="@+id/draft_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="260dp"
+                android:background="@drawable/bg_card_alt"
+                android:clipToOutline="true">
+
+                <ImageView
+                    android:id="@+id/preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="Selected image"
+                    android:padding="6dp"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:id="@+id/change_btn"
+                    style="@style/Sharpr.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|end"
+                    android:layout_margin="12dp"
+                    android:background="@drawable/bg_chip_primary"
+                    android:drawableStart="@drawable/ic_image"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="#FFFFFFFF"
+                    android:text="Change"
+                    android:textColor="#FFFFFFFF" />
+            </FrameLayout>
+
+            <com.vytros.projects.sharpr.ui.widgets.FlowLayout
+                android:id="@+id/info_chips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp" />
+
+            <TextView
+                android:id="@+id/guard_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_banner_warn"
+                android:padding="16dp"
+                android:textAppearance="@style/TextAppearance.S.Body"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/override_btn"
+                style="@style/Sharpr.Button.Soft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Upscale anyway"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/options"
+                layout="@layout/view_options_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" />
+
+            <TextView
+                android:id="@+id/engine_line"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:drawableStart="@drawable/ic_chip"
+                android:drawablePadding="10dp"
+                android:drawableTint="?attr/sPrimary"
+                android:gravity="center_vertical"
+                android:textAppearance="@style/TextAppearance.S.Muted" />
+
+            <TextView
+                android:id="@+id/out_preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:drawableStart="@drawable/ic_swap"
+                android:drawablePadding="10dp"
+                android:drawableTint="?attr/sPrimary"
+                android:gravity="center_vertical"
+                android:textAppearance="@style/TextAppearance.S.Muted" />
+
+            <Button
+                android:id="@+id/upscale_btn"
+                style="@style/Sharpr.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="✦  Upscale" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

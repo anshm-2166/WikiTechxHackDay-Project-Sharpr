@@ -1,0 +1,194 @@
+{
+  "source": "original.jpg",
+  "source_size": [
+    540,
+    316
+  ],
+  "note": "Default enhance settings (no denoise/blend/sharpen/grain).",
+  "files": [
+    {
+      "file": "fast-4x.png",
+      "model": "Fast",
+      "scale": 4,
+      "width": 2160,
+      "height": 1264,
+      "backend": "GPU (Intel(R) UHD Graphics)",
+      "seconds": 3.96
+    },
+    {
+      "file": "photo-4x.png",
+      "model": "Photo Ultra",
+      "scale": 4,
+      "width": 2160,
+      "height": 1264,
+      "backend": "GPU (Intel(R) UHD Graphics)",
+      "seconds": 128.96
+    },
+    {
+      "file": "art-4x.png",
+      "model": "Illustration",
+      "scale": 4,
+      "width": 2160,
+      "height": 1264,
+      "backend": "GPU (Intel(R) UHD Graphics)",
+      "seconds": 45.18
+    },
+    {
+      "file": "fast-2x.png",
+      "model": "Fast",
+      "scale": 2,
+      "width": 1080,
+      "height": 632,
+      "backend": "GPU (Intel(R) UHD Graphics)",
+      "seconds": 3.83
+    },
+    {
+      "file": "bicubic-4x.png",
+      "model": "Bicubic (cv2.INTER_CUBIC)",
+      "scale": 4,
+      "width": 2160,
+      "height": 1264,
+      "backend": "CPU",
+      "seconds": 0.02
+    },
+    {
+      "file": "nearest-4x.png",
+      "model": "Nearest neighbour",
+      "scale": 4,
+      "width": 2160,
+      "height": 1264,
+      "backend": "CPU",
+      "seconds": 0.0
+    },
+    {
+      "file": "crop-bug-original.png",
+      "model": "original",
+      "crop_of_original_px": [
+        283,
+        108,
+        112,
+        62
+      ],
+      "zoom": 4,
+      "width": 448,
+      "height": 248
+    },
+    {
+      "file": "crop-bug-bicubic.png",
+      "model": "bicubic",
+      "crop_of_original_px": [
+        283,
+        108,
+        112,
+        62
+      ],
+      "zoom": 4,
+      "width": 448,
+      "height": 248
+    },
+    {
+      "file": "crop-bug-fast.png",
+      "model": "fast",
+      "crop_of_original_px": [
+        283,
+        108,
+        112,
+        62
+      ],
+      "zoom": 4,
+      "width": 448,
+      "height": 248
+    },
+    {
+      "file": "crop-bug-photo.png",
+      "model": "photo",
+      "crop_of_original_px": [
+        283,
+        108,
+        112,
+        62
+      ],
+      "zoom": 4,
+      "width": 448,
+      "height": 248
+    },
+    {
+      "file": "crop-bug-art.png",
+      "model": "art",
+      "crop_of_original_px": [
+        283,
+        108,
+        112,
+        62
+      ],
+      "zoom": 4,
+      "width": 448,
+      "height": 248
+    },
+    {
+      "file": "crop-slayyers-original.png",
+      "model": "original",
+      "crop_of_original_px": [
+        128,
+        164,
+        284,
+        56
+      ],
+      "zoom": 4,
+      "width": 1136,
+      "height": 224
+    },
+    {
+      "file": "crop-slayyers-bicubic.png",
+      "model": "bicubic",
+      "crop_of_original_px": [
+        128,
+        164,
+        284,
+        56
+      ],
+      "zoom": 4,
+      "width": 1136,
+      "height": 224
+    },
+    {
+      "file": "crop-slayyers-fast.png",
+      "model": "fast",
+      "crop_of_original_px": [
+        128,
+        164,
+        284,
+        56
+      ],
+      "zoom": 4,
+      "width": 1136,
+      "height": 224
+    },
+    {
+      "file": "crop-slayyers-photo.png",
+      "model": "photo",
+      "crop_of_original_px": [
+        128,
+        164,
+        284,
+        56
+      ],
+      "zoom": 4,
+      "width": 1136,
+      "height": 224
+    },
+    {
+      "file": "crop-slayyers-art.png",
+      "model": "art",
+      "crop_of_original_px": [
+        128,
+        164,
+        284,
+        56
+      ],
+      "zoom": 4,
+      "width": 1136,
+      "height": 224
+    }
+  ]
+}

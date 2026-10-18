@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Sharpr.TextView" parent="@android:style/Widget.TextView">
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- Typography -->
+    <style name="TextAppearance.S" parent="@android:style/TextAppearance">
+        <item name="android:textColor">?attr/sText</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="TextAppearance.S.Display" parent="">
+        <item name="android:textSize">34sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">-0.015</item>
+    </style>
+    <style name="TextAppearance.S.Title" parent="">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TextAppearance.S.Heading" parent="">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TextAppearance.S.Body" parent="">
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="TextAppearance.S.Muted" parent="">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?attr/sMuted</item>
+    </style>
+    <style name="TextAppearance.S.Label" parent="">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TextAppearance.S.Caption" parent="">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">?attr/sMuted</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+    <style name="TextAppearance.S.Section" parent="">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/sPrimary</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <!-- Surfaces -->
+    <style name="Sharpr.Card" parent="">
+        <item name="android:background">@drawable/bg_card</item>
+        <item name="android:padding">18dp</item>
+    </style>
+
+    <!-- Buttons -->
+    <style name="Sharpr.Button.Primary" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/bg_button_primary</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minHeight">54dp</item>
+        <item name="android:paddingStart">26dp</item>
+        <item name="android:paddingEnd">26dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+    <style name="Sharpr.Button.Soft" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/bg_button_soft</item>
+        <item name="android:textColor">?attr/sText</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minHeight">44dp</item>
+        <item name="android:paddingStart">18dp</item>
+        <item name="android:paddingEnd">18dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+    <style name="Sharpr.Button.Danger" parent="Sharpr.Button.Soft">
+        <item name="android:textColor">?attr/sDanger</item>
+    </style>
+    <style name="Sharpr.IconButton" parent="">
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:background">@drawable/bg_icon_button</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:tint">?attr/sText</item>
+    </style>
+
+    <style name="Sharpr.Action" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:drawableTint">?attr/sText</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:background">@drawable/bg_ripple_plain</item>
+        <item name="android:textColor">?attr/sText</item>
+        <item name="android:textSize">12.5sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Sharpr.Dialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/bg_dialog</item>
+        <item name="android:textColorPrimary">?attr/sText</item>
+        <item name="android:textColorSecondary">?attr/sMuted</item>
+        <item name="buttonBarButtonStyle">@style/Sharpr.DialogButton</item>
+    </style>
+    <style name="Sharpr.DialogButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">?attr/sPrimary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Chips -->
+    <style name="Sharpr.Chip" parent="">
+        <item name="android:gravity">center</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:minHeight">32dp</item>
+        <item name="android:background">@drawable/bg_chip</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:textColor">?attr/sText</item>
+        <item name="android:textSize">12.5sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Sliders -->
+    <style name="Sharpr.SeekBar" parent="@android:style/Widget.SeekBar">
+        <item name="android:progressDrawable">@drawable/seek_track</item>
+        <item name="android:thumb">@drawable/seek_thumb</item>
+        <item name="android:splitTrack">false</item>
+        <item name="android:minHeight">28dp</item>
+        <item name="android:maxHeight">28dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+    </style>
+</resources>
+
+
+
