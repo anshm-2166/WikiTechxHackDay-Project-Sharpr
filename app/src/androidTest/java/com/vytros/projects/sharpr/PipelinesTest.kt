@@ -24,6 +24,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.BeforeClass
+import org.junit.Rule
+import org.junit.rules.Timeout
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
@@ -38,6 +40,9 @@ import kotlin.random.Random
 /** Runs the real pipelines (native core, MediaCodec, GL) on the device. */
 @RunWith(AndroidJUnit4::class)
 class PipelinesTest {
+    @get:Rule
+    val timeout: Timeout = Timeout.seconds(300)
+
     companion object {
         private val app get() = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as SharprApp
         val graph get() = app.graph
