@@ -1,110 +1,136 @@
 # Sharpr
 
-**Free and open source, on-device AI image upscaling for Android and desktop.**
-Make small pictures big using the power of your own GPU. Your memories never leave your device.
+**On-device AI enhancement for images, video and audio on Android.**
+Upscale photos up to 4×, sharpen whole videos frame by frame, and strip noise and hum from voice and music. Everything runs on your phone's GPU (or CPU). Nothing is uploaded, ever.
+
+[![Android](https://github.com/anshm-2166/WikiTechxHackDay-Project-Sharpr/actions/workflows/android.yml/badge.svg?branch=main)](https://github.com/anshm-2166/WikiTechxHackDay-Project-Sharpr/actions/workflows/android.yml)
 
 *A project by The Bug Slayyers.*
 
 <p align="center">
-  <img src="docs/screenshots/android-create.png" width="23%" alt="Create screen" />
-  <img src="docs/screenshots/android-compare.png" width="23%" alt="Before and after slider" />
-  <img src="docs/screenshots/android-zoom.png" width="23%" alt="Zoomed comparison" />
-  <img src="docs/screenshots/android-edit.png" width="23%" alt="Edit and regenerate" />
+  <img src="docs/screenshots/dark-onboarding-1.png" width="19%" alt="Onboarding" />
+  <img src="docs/screenshots/dark-studio.png" width="19%" alt="Studio" />
+  <img src="docs/screenshots/dark-detail-image.png" width="19%" alt="Before and after slider" />
+  <img src="docs/screenshots/dark-editor-video.png" width="19%" alt="Video editor" />
+  <img src="docs/screenshots/dark-detail-audio.png" width="19%" alt="Audio A/B" />
 </p>
 
 ## Why Sharpr
 
-Apps like Remini send your photos to a server. Sharpr does the work on your phone or computer: no account, no upload, no subscription.
+Apps like Remini send your photos to a server. Sharpr does all of the work on the device: no account, no upload, no subscription, no watermark.
 
-- **Private by design.** Images are processed locally. Nothing is uploaded, nothing is tracked.
-- **GPU first, CPU fallback.** Runs on the Vulkan GPU through ncnn. If the GPU fails to load, errors out or returns a bad result, Sharpr finishes the job on the CPU and tells you which engine ran. Choose Auto, GPU or CPU in Settings.
-- **Smart guards.** Resolution alone never blocks an image: a blurry 2K photo is exactly what upscaling helps. Sharpr measures real sharpness on native-resolution crops and only holds back images that are both large and already crisp (you can still override unless strict guard is on). The scale is lowered automatically to stay under your output size limit, and a **1x Enhance** mode restores detail at the original size when an image is too big to enlarge.
-- **Three models.** Fast (compact), Photo Ultra (Real-ESRGAN x4plus) and Illustration (Real-ESRGAN x4plus anime), at 1x to 4x.
-- **Customisable.** Denoise, natural blend, sharpen and film grain; model, scale, tile size, CPU threads, FP16; output format and quality; light, dark and AMOLED themes; four purple accents; three fonts.
-- **Library, compare, share, edit.** Every result is kept. Open one to compare before/after with a slider (pinch to zoom), share it, save it, or regenerate it from the original with new settings.
+- **Private by design.** Media are processed locally and stay in the app's own storage until you share or save them.
+- **GPU first, CPU always.** Inference runs on the Vulkan GPU through [ncnn](https://github.com/Tencent/ncnn). If a driver fails, errors out or returns garbage (checked on the first tile), Sharpr finishes on the CPU and tells you. Choose Auto, GPU or CPU.
+- **Images, video and audio** in one app, with one queue that keeps working in the background.
 
-## Screenshots
+## Features
 
-### Android
+### Images
+- **Six models** (see below): general, photo, anime/illustration and restoration, from 1× ("fix at the same size") up to 4×.
+- **AI denoise** variants for models trained with noise removal, plus classic pre-denoise, natural blend, sharpening and film grain.
+- **Quality boost (TTA):** every tile runs 8 ways (flips and transposes) and is averaged, for cleaner edges.
+- **Batch:** pick up to 30 images and apply the same settings.
+- **Smart guards:** resolution alone never blocks an image. Sharpr measures real sharpness on native-resolution crops and only holds back images that are both large and already crisp. The scale is lowered automatically to stay under your output-size limit.
+- **Compare:** before/after slider with pinch zoom, pan and double-tap magnify.
 
-| Create | Compare | Details | Edit |
-| --- | --- | --- | --- |
-| <img src="docs/screenshots/android-create-empty.png" width="200" /> | <img src="docs/screenshots/android-compare.png" width="200" /> | <img src="docs/screenshots/android-detail-info.png" width="200" /> | <img src="docs/screenshots/android-edit.png" width="200" /> |
+### Video
+- **Frame-by-frame upscaling up to 4K** (or 1× "fix"), with H.264 or HEVC output at three quality levels. Scales the device's encoder can't take are disabled up front.
+- **Repeated-frame reuse:** frames that didn't change (held anime frames, static shots) reuse the previous result instead of running the network again. Animation, which often holds each drawing for two or three frames, benefits most.
+- **Soundtrack:** copied untouched, or cleaned by the audio engine. Rotation metadata is preserved.
+- **Preview mode:** process just the first 3 or 10 seconds to judge a model before a long run.
+- **Compare:** play the original or the result from the same position, or freeze a frame from both into the compare slider.
 
-### Desktop (Kivy)
+### Audio
+- **Voice mode:** [RNNoise](https://github.com/xiph/rnnoise), a neural noise suppressor trained on speech, followed by a light spectral clean-up.
+- **Universal mode:** decision-directed Wiener filtering against a noise floor learned from the whole file, gentle enough for music.
+- **De-hum:** finds 50 or 60 Hz mains hum and its harmonics (or you force one) and notches them out.
+- **Rumble filter, clarity EQ** (presence and air) and **loudness normalisation** to −16 LUFS (ITU-R BS.1770 gating) with a −1 dBFS peak ceiling.
+- **A/B listening:** switch between original and cleaned while playing, at the same moment, with both waveforms on screen.
+- Any input Android can decode (MP3, AAC/M4A, Opus, Ogg, FLAC, WAV, AMR…), output as AAC (M4A) or WAV at 48 kHz.
 
-The desktop app opens in a phone-style layout and adapts as the window grows.
+### Everywhere
+- **Background processing:** a sequential job queue runs in a foreground service (`mediaProcessing` on Android 15+, `dataSync` before), holds a wake lock, shows progress with ETA in a notification with a Cancel action, and notifies you when results are ready.
+- **Library** of every result, filterable by type, with share, save to Pictures/Movies/Music, delete, and **Edit** (re-run from the original with new settings).
+- **Share to Sharpr** from any gallery, file manager or recorder.
+- **Design:** Jetpack Compose UI with light, dark and system themes, a one-tap theme toggle, AMOLED black, Material You wallpaper colours, five gradient accents, Bricolage Grotesque headlines and a choice of body typeface (Plus Jakarta Sans, Inter, Outfit, Space Grotesk). First-launch onboarding sets theme, accent and notifications and detects your GPU.
 
-| Create | Compare |
-| --- | --- |
-| <img src="docs/screenshots/desktop-create-image-dark.png" width="420" /> | <img src="docs/screenshots/desktop-detail-compare-dark.png" width="420" /> |
-| **Library** | **Settings** |
-| <img src="docs/screenshots/desktop-library-dark.png" width="420" /> | <img src="docs/screenshots/desktop-settings-dark.png" width="420" /> |
+## Models
 
-Light theme: [create](docs/screenshots/desktop-create-image-light.png), [compare](docs/screenshots/desktop-detail-compare-light.png), [library](docs/screenshots/desktop-library-light.png), [settings](docs/screenshots/desktop-settings-light.png).
+| Model in the app | Network | Best for | Scales | License |
+| --- | --- | --- | --- | --- |
+| **Fast** | Real-ESRGAN `realesr-animevideov3` (x2/x3/x4) | Everything, and video | 1–4× | BSD-3-Clause |
+| **Photo Ultra** | Real-ESRGAN `x4plus` | Real-world photos, most detail | 1, 2, 4× | BSD-3-Clause |
+| **Photo Lite** | waifu2x UpConv7 photo (+ noise level 2) | Gentle, natural 2× | 1, 2× | MIT |
+| **Anime HD** | Real-CUGAN SE (conservative / denoise 3×) | Line art, anime frames | 1–4× | MIT |
+| **Illustration** | Real-ESRGAN `x4plus-anime` | Drawings, digital art | 1, 2, 4× | BSD-3-Clause |
+| **Restore** | waifu2x CUNet (noise 1 / noise 3) | JPEG blocks and noise at the same size | 1× | MIT |
 
-## Samples
+Lower scales are produced by box-averaging the network's native output (supersampling), which gives sharper results than running a smaller network. Every model's tile geometry (border crop, alignment, residual head) was measured and is covered by tests.
 
-Original (540x316) and the result of the Fast model at 4x, generated by the desktop engine:
+## How it works
 
-| Original | Sharpr 4x |
-| --- | --- |
-| <img src="docs/samples/original.jpg" width="420" /> | <img src="docs/samples/fast-4x.png" width="420" /> |
+```
+Image   decode (EXIF-aware) ─► OpenCV pre-denoise ─► ncnn tiles (GPU/CPU, TTA) ─► OpenCV blend / sharpen / grain ─► PNG/JPEG/WebP
+Video   MediaExtractor ─► HW decoder ─► SurfaceTexture ─► GL readback ─► ncnn ─► GL ─► HW encoder (surface) ─► MediaMuxer
+                                                         └─ repeated frame? reuse last result            audio: copy or clean ─┘
+Audio   MediaCodec decode ─► 48 kHz resampler ─► de-hum ─► high-pass ─► RNNoise ─► spectral Wiener ─► EQ ─► loudness ─► AAC/WAV
+```
 
-More outputs (Photo Ultra, Illustration, bicubic and nearest-neighbour baselines) and timings are in [`docs/samples`](docs/samples).
-
-## Tech stack
-
-| Layer | Technology |
-| --- | --- |
-| Inference | **ncnn** (Tencent), Vulkan GPU with CPU fallback, tiled Real-ESRGAN style super-resolution |
-| Image processing | **OpenCV**: sharpness and noise analysis, denoise, natural blend, sharpening, film grain |
-| Models | Real-ESRGAN (BSD-3-Clause): `realesr-animevideov3`, `realesrgan-x4plus`, `realesrgan-x4plus-anime` |
-| Android | Kotlin, XML layouts and Fragments with custom Views, JNI + C++ (NDK 28) |
-| Desktop | Python, **Kivy**, ncnn Python bindings, OpenCV |
-
-Inference runs entirely through ncnn. OpenCV is used for analysis and for the pre- and post-processing around the network, not for running the network itself.
+Performance notes:
+- **Loaded networks are cached** across jobs and video frames, so a batch or a video pays the model load and Vulkan pipeline compilation once. They are released after 45 s idle or when the system is low on memory.
+- **Tile size follows the GPU's memory budget**, scaled per model (compact networks take bigger tiles). Each tile carries just enough context for its network's receptive field, so seams are invisible (tested to > 60 dB PSNR against untiled output for the compact models).
+- **Precision:** Exact (fp32), Balanced (fp16 storage, the default) or Turbo (fp16 arithmetic).
+- **CPU path** uses the performance cores only by default, with ncnn's NEON/x86 kernels.
+- The video path never leaves the GPU for colour conversion: decode, readback and encode go through GL; only the RGBA frame visits ncnn.
 
 ## Build and run
 
-### Android
-
 Requirements: Android Studio (or JDK 17+), Android SDK 37, NDK 28.2.13676358, CMake 3.31.6.
 
-```powershell
-scripts\setup-native.ps1      # downloads the prebuilt ncnn Vulkan libraries (~60 MB)
-.\gradlew.bat :app:assembleDebug
+```bash
+scripts/setup-native.sh        # downloads the prebuilt ncnn Vulkan libraries (~60 MB); setup-native.ps1 on Windows
+./gradlew :app:assembleDebug
 ```
 
-The APK is at `app/build/outputs/apk/debug/app-debug.apk`. minSdk 26. Tested on a Snapdragon 7 Gen 3 device (Adreno 720) running Android 16: a 540x316 image to 4x took about 3.5 s on the GPU and about 14 s on the CPU.
+The APK is at `app/build/outputs/apk/debug/app-debug.apk`. minSdk 26 (Android 8.0). Saving to the gallery needs Android 10+; on 8 and 9 use Share.
 
-### Desktop
+## Tests
 
-```powershell
-cd desktop
-.\run.ps1
-```
+| Suite | What it covers | Run |
+| --- | --- | --- |
+| Native core (desktop) | Every model: registration, tile seams, scales, TTA, precision, cancel. Audio: bit-exact pass-through, resampler, denoise SNR, voice timing, hum detection, loudness | see `app/src/test/native/CMakeLists.txt` |
+| JVM unit tests | Model geometry and assets, guards, library JSON (incl. v1), job ETA | `./gradlew :app:testDebugUnitTest` |
+| Instrumented | All six models on device, video with sound and frame reuse, preview + clean audio, audio to M4A/WAV | `scripts/ci-device-tests.sh` with a device attached |
+| Screenshot tour | Every screen and editor in dark and light | part of the instrumented run |
 
-This creates a virtual environment, installs `requirements.txt` and starts the app. The desktop app reads the models from `app/src/main/assets/models`. Kivy is cross-platform; it has been tested on Windows 11 so far. See [`desktop/README.md`](desktop/README.md) for details.
-
-## Roadmap
-
-- Google Play release (coming soon)
-- iOS (coming soon)
-- Background processing with a foreground service on Android
+GitHub Actions runs all of them on every push, the instrumented ones on an x86_64 emulator.
 
 ## Project layout
 
 ```
-app/        Android app (Kotlin, XML, C++/ncnn via JNI)
-desktop/    Kivy desktop app
-docs/       README screenshots and sample outputs
-scripts/    Native dependency setup
+app/src/main/cpp/       native core: sr_engine (ncnn tiling), audio_dsp, jni_bridge, rnnoise/
+app/src/main/java/…/
+  engine/               image, video and audio pipelines, models, guards, codecs, GL
+  work/                 job queue, foreground service, notifications
+  data/                 settings, library, export
+  ui/                   Compose theme, components and screens
+app/src/test/           JVM tests + native desktop tests
+app/src/androidTest/    on-device pipeline tests and the screenshot tour
+docs/                   screenshots, samples, third-party licenses
+scripts/                native dependency setup, device test runner
+website/                showcase site
 ```
+
+## Roadmap
+
+- Google Play release
+- Face restoration for portraits
+- Frame interpolation (smooth 60 fps) for video
+- Persisting the queue across reboots
 
 ## License and credits
 
-Released under the MIT License (see `LICENSE`). Third-party components keep their own licenses: ncnn (BSD-3-Clause), OpenCV (Apache-2.0), Real-ESRGAN (BSD-3-Clause), Kivy (MIT), Outfit, Plus Jakarta Sans and Space Grotesk fonts (SIL OFL), Monocraft (SIL OFL).
+Released under the MIT License (see `LICENSE`). Third-party components keep their own licenses (copies in [`docs/licenses`](docs/licenses)): ncnn (BSD-3-Clause), OpenCV (Apache-2.0), Real-ESRGAN (BSD-3-Clause), Real-CUGAN ncnn (MIT), waifu2x ncnn (MIT), RNNoise (BSD-3-Clause), Jetpack Compose and Media3 (Apache-2.0). Fonts under the SIL Open Font License: Bricolage Grotesque, Plus Jakarta Sans, Inter, Outfit, Space Grotesk, JetBrains Mono.
 
 ---
 

@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.snap
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -104,7 +105,7 @@ fun CompareSlider(
     var pan by remember { mutableStateOf(Offset.Zero) }
     // Gestures move the picture directly; only double-tap animates.
     var animate by remember { mutableStateOf(false) }
-    val spec = if (animate) tween<Float>(260) else snap()
+    val spec: AnimationSpec<Float> = if (animate) tween(260) else snap()
     val shownZoom by animateFloatAsState(zoom, spec, label = "zoom")
     val shownX by animateFloatAsState(pan.x, spec, label = "panX")
     val shownY by animateFloatAsState(pan.y, spec, label = "panY")

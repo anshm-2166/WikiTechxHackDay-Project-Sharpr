@@ -1,5 +1,6 @@
 package com.vytros.projects.sharpr.ui.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,6 +46,7 @@ import com.vytros.projects.sharpr.ui.components.Segmented
 import com.vytros.projects.sharpr.ui.theme.Sharpr
 import java.io.File
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LibraryScreen(actions: Actions) {
     val c = Sharpr.colors

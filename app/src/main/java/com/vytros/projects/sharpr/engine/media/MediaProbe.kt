@@ -122,14 +122,14 @@ object VideoCaps {
     /** Some encoder for [mime] takes this size at this frame rate. */
     fun supports(mime: String, width: Int, height: Int, fps: Float): Boolean = encoders(mime).any { info ->
         runCatching {
-            val v = info.getCapabilitiesForType(mime).videoCapabilities
+            val v = info.getCapabilitiesForType(mime).videoCapabilities ?: return@runCatching false
             v.areSizeAndRateSupported(width, height, fps.toDouble()) ||
                 (v.isSizeSupported(width, height) && fps <= 60f)
         }.getOrDefault(false)
     }
 
     fun maxBitrate(mime: String): Int = encoders(mime).maxOfOrNull {
-        runCatching { it.getCapabilitiesForType(mime).videoCapabilities.bitrateRange.upper }.getOrDefault(20_000_000)
+        runCatching { it.getCapabilitiesForType(mime).videoCapabilities?.bitrateRange?.upper }.getOrNull() ?: 20_000_000
     } ?: 20_000_000
 
     fun supportsHighProfile(mime: String): Boolean = mime == MediaFormat.MIMETYPE_VIDEO_AVC && encoders(mime).any { info ->

@@ -58,7 +58,7 @@ import com.vytros.projects.sharpr.data.MediaType
 import com.vytros.projects.sharpr.engine.Analyzer
 import com.vytros.projects.sharpr.engine.ImageIO
 import com.vytros.projects.sharpr.engine.media.MediaProbe
-import com.vytros.projects.sharpr.engine.media.Waveform
+import com.vytros.projects.sharpr.engine.media.Waveform as Peaks
 import com.vytros.projects.sharpr.ui.Actions
 import com.vytros.projects.sharpr.ui.AudioDraft
 import com.vytros.projects.sharpr.ui.ImageDraft
@@ -152,6 +152,7 @@ private fun ImageCompare(r: MediaRecord) {
     )
 }
 
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 @Composable
 private fun VideoView(r: MediaRecord) {
     val c = Sharpr.colors
@@ -237,8 +238,8 @@ private fun AudioView(r: MediaRecord) {
     var after by remember { mutableStateOf<FloatArray?>(null) }
     LaunchedEffect(r.id) {
         withContext(Dispatchers.IO) {
-            before = Waveform.read(File(r.peaksIn))
-            after = Waveform.read(File(r.peaksOut))
+            before = Peaks.read(File(r.peaksIn))
+            after = Peaks.read(File(r.peaksOut))
         }
         player.select(1)
     }
