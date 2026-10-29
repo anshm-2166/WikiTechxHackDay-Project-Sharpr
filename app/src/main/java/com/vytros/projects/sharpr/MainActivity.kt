@@ -20,7 +20,8 @@ import com.vytros.projects.sharpr.ui.theme.isDarkTheme
 import com.vytros.projects.sharpr.work.Notifications
 
 class MainActivity : ComponentActivity() {
-    private val state = AppState()
+    /** Exposed for UI tests. */
+    val state = AppState()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()

@@ -17,7 +17,6 @@ local.properties
 # vendored native deps (run scripts/setup-native.ps1)
 app/src/main/cpp/third_party/
 .cxx/
-desktop/.venv/
 
 __pycache__/
 *.pyc
