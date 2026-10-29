@@ -1,0 +1,24 @@
+name: Probe versions
+on:
+  workflow_dispatch:
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Latest AndroidX versions
+        run: |
+          for a in androidx/compose/compose-bom androidx/compose/material3/material3 androidx/activity/activity-compose \
+                   androidx/media3/media3-exoplayer androidx/lifecycle/lifecycle-runtime-compose androidx/core/core-splashscreen \
+                   androidx/compose/ui/ui androidx/compose/foundation/foundation; do
+            echo "== $a"
+            curl -s "https://dl.google.com/dl/android/maven2/$a/maven-metadata.xml" | grep -o '<version>[^<]*</version>' | grep -v -E 'alpha|beta|rc|dev' | tail -4
+          done
+      - name: AGP Kotlin
+        run: |
+          curl -s https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/9.4.1/gradle-9.4.1.pom | grep -B1 -A2 kotlin | head -40
+          ./gradlew -q buildEnvironment | grep -i -E "kotlin-gradle-plugin|com.android.tools.build:gradle" | head
