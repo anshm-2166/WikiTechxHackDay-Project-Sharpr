@@ -182,11 +182,13 @@ class JobQueue(
         val id = info.id
         patch(id) { it.copy(status = JobStatus.Running, stage = "Starting", startedAt = System.currentTimeMillis()) }
         val progress = object : JobProgress {
-            override fun stage(label: String, fraction: Float, detail: String?) =
+            override fun stage(label: String, fraction: Float, detail: String?) {
                 patch(id) { it.copy(stage = label, fraction = fraction.coerceIn(0f, 1f), detail = detail) }
+            }
 
-            override fun backend(name: String, fallback: Boolean) =
+            override fun backend(name: String, fallback: Boolean) {
                 patch(id) { it.copy(backend = name, fellBack = it.fellBack || fallback) }
+            }
         }
         val s = settings.state.value
         try {

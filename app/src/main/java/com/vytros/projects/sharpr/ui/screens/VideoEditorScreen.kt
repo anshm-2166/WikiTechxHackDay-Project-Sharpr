@@ -1,6 +1,5 @@
 package com.vytros.projects.sharpr.ui.screens
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -113,9 +112,7 @@ fun VideoEditorScreen(actions: Actions, settings: AppSettings, screen: Screen.Vi
                 Modifier.fillMaxWidth().aspectRatio(ratio.coerceIn(0.6f, 2.4f)).clip(CardShape).background(c.surfaceHigh),
                 contentAlignment = Alignment.Center,
             ) {
-                AnimatedVisibility(frame != null) {
-                    if (frame != null) Image(frame, null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-                }
+                if (frame != null) Image(frame, null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
                 Box(Modifier.align(Alignment.BottomStart).padding(12.dp).clip(RoundedCornerShape(50)).background(Color.Black.copy(alpha = 0.55f)).padding(horizontal = 10.dp, vertical = 5.dp)) {
                     Text(Fmt.clock(info.durationUs / 1000), style = MaterialTheme.typography.labelMedium, color = Color.White)
                 }
