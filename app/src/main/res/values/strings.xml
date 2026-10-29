@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Sharpr</string>
+    <string name="channel_processing">Processing</string>
+    <string name="channel_processing_desc">Progress of images, videos and audio being sharpened</string>
+    <string name="channel_results">Finished</string>
+    <string name="channel_results_desc">Lets you know when a result is ready</string>
 </resources>

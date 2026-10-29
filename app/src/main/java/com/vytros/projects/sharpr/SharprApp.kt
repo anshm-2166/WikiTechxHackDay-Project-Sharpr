@@ -1,33 +1,24 @@
 package com.vytros.projects.sharpr
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
-import com.vytros.projects.sharpr.data.ImportedImage
 import com.vytros.projects.sharpr.data.LibraryStore
 import com.vytros.projects.sharpr.data.SettingsStore
-import com.vytros.projects.sharpr.data.ThemeMode
-import com.vytros.projects.sharpr.engine.ImageAnalysis
-import com.vytros.projects.sharpr.engine.UpscaleManager
-import com.vytros.projects.sharpr.engine.UpscaleOptions
-import com.vytros.projects.sharpr.engine.UpscalePipeline
-import kotlinx.coroutines.flow.MutableStateFlow
-
-/** The picked-but-not-yet-upscaled image on the Create tab. Lives here so it survives navigation. */
-data class Draft(
-    val image: ImportedImage,
-    val analysis: ImageAnalysis,
-    val options: UpscaleOptions,
-    /** User tapped "Upscale anyway" for this image. */
-    val override: Boolean = false,
-)
+import com.vytros.projects.sharpr.engine.AudioPipeline
+import com.vytros.projects.sharpr.engine.ImagePipeline
+import com.vytros.projects.sharpr.engine.SessionCache
+import com.vytros.projects.sharpr.engine.VideoPipeline
+import com.vytros.projects.sharpr.work.JobQueue
+import com.vytros.projects.sharpr.work.Notifications
 
 /** Hand-rolled service locator: the app is small enough that DI would be noise. */
 class Graph(app: Application) {
     val settings = SettingsStore(app)
     val library = LibraryStore(app)
-    val pipeline by lazy { UpscalePipeline(app, library) }
-    val manager by lazy { UpscaleManager(pipeline, settings) }
-    val draft = MutableStateFlow<Draft?>(null)
+    val sessions by lazy { SessionCache(app.assets) }
+    val audio by lazy { AudioPipeline(library) }
+    val image by lazy { ImagePipeline(app, library, sessions) }
+    val video by lazy { VideoPipeline(library, sessions, audio) }
+    val queue by lazy { JobQueue(app, settings, library, sessions, image, video, audio) }
 }
 
 class SharprApp : Application() {
@@ -37,16 +28,12 @@ class SharprApp : Application() {
     override fun onCreate() {
         super.onCreate()
         graph = Graph(this)
-        applyNightMode(graph.settings.state.value.themeMode)
+        Notifications.ensureChannels(this)
     }
 
-    companion object {
-        fun applyNightMode(mode: ThemeMode) = AppCompatDelegate.setDefaultNightMode(
-            when (mode) {
-                ThemeMode.System -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                ThemeMode.Light -> AppCompatDelegate.MODE_NIGHT_NO
-                ThemeMode.Dark -> AppCompatDelegate.MODE_NIGHT_YES
-            },
-        )
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        // Drop the loaded network when the system is short on memory and nothing is running.
+        if (level >= TRIM_MEMORY_RUNNING_LOW && graph.queue.jobs.value.none { it.active }) graph.sessions.release()
     }
 }

@@ -1,80 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-
-    <!-- Light palette. values-night/themes.xml redefines the same style with the dark palette. -->
-    <style name="Theme.Sharpr" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="sBg">#FFF7F4FF</item>
-        <item name="sSurface">#FFFFFFFF</item>
-        <item name="sSurfaceAlt">#FFEFEAFE</item>
-        <item name="sPrimary">#FF7C3AED</item>
-        <item name="sPrimaryDeep">#FF5B21B6</item>
-        <item name="sOnPrimary">#FFFFFFFF</item>
-        <item name="sText">#FF1B1030</item>
-        <item name="sMuted">#FF6B6385</item>
-        <item name="sOutline">#FFE3DCF7</item>
-        <item name="sGradEnd">#FFC026D3</item>
-        <item name="sDanger">#FFD92D5B</item>
-        <item name="sWarn">#FFB7791F</item>
-        <item name="sSuccess">#FF16A34A</item>
-        <item name="sScrim">#990E0A1A</item>
-
-        <item name="colorPrimary">?attr/sPrimary</item>
-        <item name="colorAccent">?attr/sPrimary</item>
-        <item name="colorControlActivated">?attr/sPrimary</item>
-        <item name="android:colorBackground">?attr/sBg</item>
-        <item name="android:windowBackground">?attr/sBg</item>
-        <item name="android:textColorPrimary">?attr/sText</item>
-        <item name="android:textColorSecondary">?attr/sMuted</item>
-        <item name="android:textColorHint">?attr/sMuted</item>
-        <item name="android:textColor">?attr/sText</item>
-        <item name="android:fontFamily">@font/outfit_family</item>
+    <!-- Window-level theme only; everything inside is drawn by Compose (ui/theme). -->
+    <style name="Theme.Sharpr" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_bg</item>
+        <item name="android:colorBackground">@color/window_bg</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
         <item name="android:enforceNavigationBarContrast" tools:targetApi="29">false</item>
         <item name="android:enforceStatusBarContrast" tools:targetApi="29">false</item>
-        <item name="android:windowAnimationStyle">@style/Sharpr.WindowAnim</item>
-        <item name="android:textViewStyle">@style/Sharpr.TextView</item>
     </style>
-
-    <style name="Sharpr.WindowAnim" parent="@android:style/Animation.Activity" />
-
-    <!-- Accent overlays (light). Dark variants live in values-night. -->
-    <style name="ThemeOverlay.Sharpr.Accent.Violet" parent="">
-        <item name="sPrimary">#FF7C3AED</item>
-        <item name="sPrimaryDeep">#FF5B21B6</item>
-        <item name="sGradEnd">#FFC026D3</item>
-    </style>
-    <style name="ThemeOverlay.Sharpr.Accent.Orchid" parent="">
-        <item name="sPrimary">#FFC026D3</item>
-        <item name="sPrimaryDeep">#FF86198F</item>
-        <item name="sGradEnd">#FF7C3AED</item>
-    </style>
-    <style name="ThemeOverlay.Sharpr.Accent.Indigo" parent="">
-        <item name="sPrimary">#FF5B4BEA</item>
-        <item name="sPrimaryDeep">#FF3F32B8</item>
-        <item name="sGradEnd">#FF9333EA</item>
-    </style>
-    <style name="ThemeOverlay.Sharpr.Accent.Lilac" parent="">
-        <item name="sPrimary">#FF9D7BEA</item>
-        <item name="sPrimaryDeep">#FF7A55D0</item>
-        <item name="sGradEnd">#FFEC4899</item>
-    </style>
-
-    <!-- Font overlays. -->
-    <style name="ThemeOverlay.Sharpr.Font.Outfit" parent="">
-        <item name="android:fontFamily">@font/outfit_family</item>
-    </style>
-    <style name="ThemeOverlay.Sharpr.Font.Jakarta" parent="">
-        <item name="android:fontFamily">@font/jakarta_family</item>
-    </style>
-    <style name="ThemeOverlay.Sharpr.Font.Grotesk" parent="">
-        <item name="android:fontFamily">@font/grotesk_family</item>
-    </style>
-
-    <!-- Pure black surfaces; only meaningful in night mode. -->
-    <style name="ThemeOverlay.Sharpr.Amoled" parent="" />
 </resources>
-
-
