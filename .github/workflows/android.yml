@@ -81,6 +81,8 @@ jobs:
           build/native-test/sharpr_native_tests app/src/main/assets/models build/native-out
 
   device-tests:
+    # Emulator run (pipelines + screenshot tour) is slow; start it manually from the Actions tab.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 90
     permissions:
